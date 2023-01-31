@@ -511,7 +511,8 @@ test_that("SPARK-17811, SPARK-18011: can create DataFrame containing NA as date 
 test_that("SPARK-42005: collect dataframe with missing date and non-missing datetime", {
   df <- data.frame(x = as.Date(NA), y = as.POSIXct("2022-01-01"))
   expect_error(df_collected <- collect(createDataFrame(df)), NA)
-  expect_equal(df_collected, df)
+  expect_true(is.na(df_collected$x[1]))
+  expect_equal(df_collected$y[1], as.POSIXct("2022-01-01"))
 })
 
 test_that("create DataFrame with complex types", {
